@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cadadia</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #0a0e1a 0%, #1a0a14 50%, #0d1525 100%);
+      font-family: Georgia, serif;
+      color: #e8e4f0;
+      padding-bottom: 60px;
+    }
+
+    header {
+      text-align: center;
+      padding: 48px 24px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: #6b9fd4;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .subhead {
+      color: rgba(232,228,240,0.45);
+      margin-top: 12px;
+      font-size: 14px;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      margin-top: 34px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232,228,240,0.35);
+      margin-bottom: 14px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      padding: 10px 18px;
+      border-radius: 100px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      color: rgba(232,228,240,0.6);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill.cat-active {
+      border-color: #6b9fd4;
+      background: rgba(107,159,212,0.15);
+      color: #6b9fd4;
+    }
+
+    .pill.lvl-active {
+      border-color: #8b2a4a;
+      background: rgba(139,42,74,0.2);
+      color: #c4607e;
+    }
+
+    .pill strong { font-style: normal; }
+
+    .pill .subdesc {
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    .generate-wrap {
+      text-align: center;
+      margin: 36px 0;
+    }
+
+    #generate-btn {
+      padding: 14px 44px;
+      background: linear-gradient(135deg, #8b2a4a, #6b3a7a);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-size: 14px;
+      font-family: Georgia, serif;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      min-width: 220px;
+    }
+
+    #generate-btn:disabled {
+      background: rgba(139,42,74,0.2);
+      color: rgba(232,228,240,0.3);
+      cursor: default;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: rgba(232,228,240,0.3);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .error {
+      text-align: center;
+      color: #c4607e;
+      font-size: 14px;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0.75;
+    }
+
+    .word-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .word-spanish {
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 400;
+      font-style: italic;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .word-meta {
+      font-size: 12px;
+      color: rgba(232,228,240,0.38);
+      margin-top: 5px;
+    }
+
+    .word-english {
+      background: rgba(107,159,212,0.12);
+      border: 1px solid rgba(107,159,212,0.25);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 14px;
+      color: #6b9fd4;
+    }
+
+    .content-spanish {
+      font-style: italic;
+      color: #fff;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .reveal-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      color: rgba(232,228,240,0.4);
+      font-size: 11px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+
+    .translation {
+      margin-top: 12px;
+      font-size: 14px;
+      line-height: 1.7;
+      display: none;
+    }
+
+    .translation.visible { display: block; }
+
+    .phrase-context {
+      font-size: 12px;
+      color: rgba(232,228,240,0.4);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .tip-box {
+      background: rgba(107,159,212,0.05);
+      border: 1px solid rgba(107,159,212,0.12);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: rgba(232,228,240,0.55);
+      line-height: 1.8;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .tip-box strong { color: rgba(232,228,240,0.8); }
+
+    .badge {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(232,228,240,0.25);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">TU LECCIÓN DE HOY</div>
+  <h1>cadadia</h1>
+  <p class="subhead">una palabra. una frase. una oración. un párrafo.</p>
+</header>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-label">ELIGE UNA CATEGORÍA</div>
+    <div class="pills" id="category-pills">
+      <button class="pill" data-cat="Food" data-prompt="Food" onclick="selectCat(this)">🍽️ comida</button>
+      <button class="pill" data-cat="Vacation" data-prompt="Vacation" onclick="selectCat(this)">✈️ vacaciones</button>
+      <button class="pill" data-cat="Work" data-prompt="Work" onclick="selectCat(this)">💼 trabajo</button>
+      <button class="pill" data-cat="Shopping" data-prompt="Shopping" onclick="selectCat(this)">🛍️ compras</button>
+      <button class="pill" data-cat="Family" data-prompt="Family & Relationships" onclick="selectCat(this)">👨‍👩‍👧 familia</button>
+      <button class="pill" data-cat="Health" data-prompt="Health & Body" onclick="selectCat(this)">🏥 salud</button>
+      <button class="pill" data-cat="Weather" data-prompt="Weather & Nature" onclick="selectCat(this)">🌤️ clima</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">ELIGE TU NIVEL</div>
+    <div class="pills" id="level-pills">
+      <button class="pill" data-level="A1" onclick="selectLevel(this)"><strong>A1</strong> <span class="subdesc">principiante</span></button>
+      <button class="pill" data-level="A2" onclick="selectLevel(this)"><strong>A2</strong> <span class="subdesc">elemental</span></button>
+      <button class="pill" data-level="B1" onclick="selectLevel(this)"><strong>B1</strong> <span class="subdesc">intermedio</span></button>
+      <button class="pill" data-level="B2" onclick="selectLevel(this)"><strong>B2</strong> <span class="subdesc">avanzado</span></button>
+      <button class="pill" data-level="C1" onclick="selectLevel(this)"><strong>C1</strong> <span class="subdesc">experto</span></button>
+    </div>
+  </div>
+
+  <div class="generate-wrap">
+    <button id="generate-btn" disabled onclick="generate()">GENERATE LESSON →</button>
+    <p class="hint" id="hint">elige una categoría y un nivel para continuar</p>
+  </div>
+
+  <div class="error hidden" id="error-msg">algo salió mal. intenta de nuevo.</div>
+
+  <div class="cards hidden" id="cards">
+
+    <div class="card" style="border-left: 3px solid #6b9fd4;">
+      <div class="card-label" style="color:#6b9fd4;">palabra del día</div>
+      <div class="word-row">
+        <div>
+          <div class="word-spanish" id="word-spanish"></div>
+          <div class="word-meta" id="word-meta"></div>
+        </div>
+        <div class="word-english" id="word-english"></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #c4607e;">
+      <div class="card-label" style="color:#c4607e;">frase del día</div>
+      <div class="content-spanish" id="phrase-spanish"></div>
+      <button class="reveal-btn" onclick="toggleReveal('phrase')">mostrar traducción ↓</button>
+      <div class="translation" id="phrase-translation" style="color:#c4607e;">
+        <div id="phrase-english"></div>
+        <div class="phrase-context" id="phrase-context"></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #4a7ab5;">
+      <div class="card-label" style="color:#4a7ab5;">oración de ejemplo</div>
+      <div class="content-spanish" id="sentence-spanish"></div>
+      <button class="reveal-btn" onclick="toggleReveal('sentence')">mostrar traducción ↓</button>
+      <div class="translation" id="sentence-translation" style="color:#6b9fd4;">
+        <div id="sentence-english"></div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left: 3px solid #7a3a5a;">
+      <div class="card-label" style="color:#7a3a5a;">párrafo completo</div>
+      <div class="content-spanish" id="paragraph-spanish"></div>
+      <button class="reveal-btn" onclick="toggleReveal('paragraph')">mostrar traducción ↓</button>
+      <div class="translation" id="paragraph-translation" style="color:#c4607e;">
+        <div id="paragraph-english"></div>
+      </div>
+    </div>
+
+    <div class="tip-box" id="tip-box">
+      <span>📌</span>
+      <span><strong>consejo: </strong><span id="tip-text"></span></span>
+    </div>
+
+    <div class="badge" id="badge"></div>
+
+  </div>
+</div>
+
+<script>
+  let selectedCat = null;
+  let selectedLevel = null;
+  let selectedPrompt = null;
+
+  function selectCat(el) {
+    document.querySelectorAll('#category-pills .pill').forEach(p => p.classList.remove('cat-active'));
+    el.classList.add('cat-active');
+    selectedCat = el.dataset.cat;
+    selectedPrompt = el.dataset.prompt;
+    checkReady();
+  }
+
+  function selectLevel(el) {
+    document.querySelectorAll('#level-pills .pill').forEach(p => p.classList.remove('lvl-active'));
+    el.classList.add('lvl-active');
+    selectedLevel = el.dataset.level;
+    checkReady();
+  }
+
+  function checkReady() {
+    const btn = document.getElementById('generate-btn');
+    const hint = document.getElementById('hint');
+    if (selectedCat && selectedLevel) {
+      btn.disabled = false;
+      hint.classList.add('hidden');
+    }
+  }
+
+  function toggleReveal(key) {
+    const el = document.getElementById(key + '-translation');
+    const btn = el.previousElementSibling;
+    const isVisible = el.classList.contains('visible');
+    el.classList.toggle('visible');
+    btn.textContent = isVisible ? 'mostrar traducción ↓' : 'ocultar traducción ↑';
+  }
+
+  async function generate() {
+    const btn = document.getElementById('generate-btn');
+    const cards = document.getElementById('cards');
+    const errorMsg = document.getElementById('error-msg');
+
+    btn.textContent = 'generando...';
+    btn.disabled = true;
+    cards.classList.add('hidden');
+    errorMsg.classList.add('hidden');
+
+    // hide all translations
+    ['phrase','sentence','paragraph'].forEach(k => {
+      const t = document.getElementById(k + '-translation');
+      t.classList.remove('visible');
+      t.previousElementSibling.textContent = 'mostrar traducción ↓';
+    });
+
+    const prompt = `You are a Spanish language teacher. Generate a daily Spanish lesson for a ${selectedLevel} (CEFR) learner focused on the topic: "${selectedPrompt}".
+
+Return ONLY a valid JSON object with this exact structure:
+{
+  "word": {
+    "spanish": "the Spanish word",
+    "english": "English translation",
+    "pronunciation": "phonetic pronunciation guide",
+    "partOfSpeech": "noun/verb/adjective/etc"
+  },
+  "phrase": {
+    "spanish": "a useful everyday phrase",
+    "english": "English translation",
+    "context": "one sentence explaining when to use it"
+  },
+  "sentence": {
+    "spanish": "a full sentence using the word",
+    "english": "English translation"
+  },
+  "paragraph": {
+    "spanish": "a short paragraph (3-4 sentences) using the word and phrase naturally",
+    "english": "English translation"
+  },
+  "tip": "one quick cultural or grammar tip related to this word or phrase"
+}
+
+Make the content genuinely useful, natural-sounding, and appropriately complex for ${selectedLevel} level. No markdown, no explanation, just the JSON.`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const data = await res.json();
+      const text = data.content?.find(b => b.type === 'text')?.text || '';
+      const clean = text.replace(/```json|```/g, '').trim();
+      const d = JSON.parse(clean);
+
+      document.getElementById('word-spanish').textContent = d.word.spanish;
+      document.getElementById('word-meta').textContent = d.word.pronunciation + ' · ' + d.word.partOfSpeech;
+      document.getElementById('word-english').textContent = d.word.english;
+      document.getElementById('phrase-spanish').textContent = d.phrase.spanish;
+      document.getElementById('phrase-english').textContent = d.phrase.english;
+      document.getElementById('phrase-context').textContent = '💡 ' + d.phrase.context;
+      document.getElementById('sentence-spanish').textContent = d.sentence.spanish;
+      document.getElementById('sentence-english').textContent = d.sentence.english;
+      document.getElementById('paragraph-spanish').textContent = d.paragraph.spanish;
+      document.getElementById('paragraph-english').textContent = d.paragraph.english;
+      document.getElementById('tip-text').textContent = d.tip;
+      document.getElementById('badge').textContent = selectedCat + ' · cefr ' + selectedLevel.toLowerCase();
+
+      cards.classList.remove('hidden');
+    } catch (e) {
+      errorMsg.classList.remove('hidden');
+    } finally {
+      btn.textContent = 'GENERATE LESSON ↻';
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
