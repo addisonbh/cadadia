@@ -435,7 +435,7 @@ Return ONLY a valid JSON object with this exact structure:
 Make the content genuinely useful, natural-sounding, and appropriately complex for ${selectedLevel} level. No markdown, no explanation, just the JSON.`;
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
