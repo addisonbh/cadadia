@@ -842,10 +842,12 @@
   catEl.textContent   = CATS[0];
   levelEl.textContent = LEVELS[0];
 
-  // Day — slow, every 4s (just refreshes to current day)
+  // Day — slow, every 3.5s, cycles through all 7 days
+  let dayIdx = new Date().getDay();
   setInterval(() => {
-    wheelSpin('w-day', DAYS[new Date().getDay()]);
-  }, 4000);
+    dayIdx = (dayIdx + 1) % DAYS.length;
+    wheelSpin('w-day', DAYS[dayIdx]);
+  }, 3500);
 
   // Category — medium, every 1.6s
   setInterval(() => {
