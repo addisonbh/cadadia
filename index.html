@@ -9,32 +9,183 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --emerald:    #1a3d2e;
-      --forest:     #254d38;
-      --burgundy:   #5c1f2e;
-      --wine:       #7a2d3e;
-      --rose:       #c9546a;
-      --gold:       #c8a96e;
-      --cream:      #fdf6ee;
-      --cream-dark: #f4ede0;
-      --ink:        #1c1409;
-      --ink-soft:   #5a4a38;
-      --ink-faint:  #a0907e;
-      --rule:       #e2d8cc;
+      --wine:      #722f37;
+      --rose:      #c9546a;
+      --gold:      #c8a96e;
+      --cream:     #fdf6ee;
+      --ink:       #1c1409;
+      --ink-soft:  #5a4a38;
+      --ink-faint: #a0907e;
+      --rule:      #e2d8cc;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       min-height: 100vh;
-      background: #722f37;
+      background: var(--wine);
       font-family: 'EB Garamond', serif;
       color: var(--ink);
       padding-bottom: 80px;
     }
 
-    /* ── HEADER ── */
-    header {
+    /* ══════════════════════════════
+       LANDING
+    ══════════════════════════════ */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 64px 24px 52px;
+      padding: 48px 24px 80px;
+      position: relative;
+    }
+
+    .landing-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4.5rem, 15vw, 8rem);
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 0.9;
+      text-shadow: 0 4px 80px rgba(0,0,0,0.2);
+      margin-bottom: 28px;
+    }
+
+    .landing-tagline {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: rgba(200,169,110,0.5);
+      letter-spacing: 0.06em;
+      margin-bottom: 64px;
+    }
+
+    /* ── WHEEL / SLOT MACHINE ── */
+    .wheel-clock {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 72px;
+    }
+
+    .wheel-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wheel-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(200,169,110,0.3);
+    }
+
+    .wheel-window {
+      height: 40px;
+      overflow: hidden;
+      position: relative;
+      min-width: 84px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* subtle top/bottom fade to sell the wheel illusion */
+    .wheel-window::before,
+    .wheel-window::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 12px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .wheel-window::before {
+      top: 0;
+      background: linear-gradient(to bottom, var(--wine), transparent);
+    }
+    .wheel-window::after {
+      bottom: 0;
+      background: linear-gradient(to top, var(--wine), transparent);
+    }
+
+    .wheel-text {
+      font-family: 'EB Garamond', serif;
+      font-size: 17px;
+      color: rgba(253,246,238,0.88);
+      text-align: center;
+      white-space: nowrap;
+      position: absolute;
+    }
+
+    /* slide out up */
+    .wheel-text.exit {
+      animation: wheelExit 0.32s ease-in forwards;
+    }
+    /* slide in from below */
+    .wheel-text.enter {
+      animation: wheelEnter 0.32s ease-out forwards;
+    }
+
+    @keyframes wheelExit {
+      from { transform: translateY(0);    opacity: 1; }
+      to   { transform: translateY(-22px); opacity: 0; }
+    }
+
+    @keyframes wheelEnter {
+      from { transform: translateY(22px); opacity: 0; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+
+    .wheel-sep {
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      color: rgba(200,169,110,0.2);
+      padding-top: 24px;
+    }
+
+    /* ── SCROLL ARROW ── */
+    .scroll-arrow {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      animation: arrowFloat 2.6s ease-in-out infinite;
+    }
+
+    .scroll-arrow svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    @keyframes arrowFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.3; }
+      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.55; }
+    }
+
+    /* ══════════════════════════════
+       APP SECTION
+    ══════════════════════════════ */
+    #app { padding-top: 8px; }
+
+    .app-header {
+      text-align: center;
+      padding: 56px 24px 44px;
     }
 
     .eyebrow {
@@ -42,40 +193,37 @@
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.5em;
-      color: rgba(200,169,110,0.6);
       text-transform: uppercase;
-      margin-bottom: 20px;
+      color: rgba(200,169,110,0.6);
+      margin-bottom: 18px;
     }
 
-    h1 {
+    .app-title {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(3.5rem, 11vw, 6rem);
+      font-size: clamp(2.8rem, 8vw, 4.2rem);
       font-weight: 400;
       font-style: italic;
       letter-spacing: -0.02em;
       color: #fff;
       line-height: 0.95;
-      text-shadow: 0 4px 60px rgba(200,169,110,0.2), 0 1px 0 rgba(255,255,255,0.08);
     }
 
     .subhead {
       font-family: 'EB Garamond', serif;
       font-style: italic;
-      font-weight: 400;
       color: rgba(200,169,110,0.5);
-      margin-top: 18px;
-      font-size: 17px;
+      margin-top: 16px;
+      font-size: 16px;
       letter-spacing: 0.06em;
     }
 
     .header-rule {
       width: 1px;
-      height: 48px;
+      height: 40px;
       background: linear-gradient(to bottom, rgba(200,169,110,0.35), transparent);
-      margin: 28px auto 0;
+      margin: 24px auto 0;
     }
 
-    /* ── CONTAINER ── */
     .container {
       max-width: 580px;
       margin: 0 auto;
@@ -110,7 +258,6 @@
       margin-bottom: 14px;
     }
 
-    /* ── CUSTOM CHECKBOXES ── */
     .check-list {
       display: flex;
       flex-direction: column;
@@ -161,8 +308,8 @@
       display: none;
       width: 8px;
       height: 5px;
-      border-left: 1.5px solid #1a3d2e;
-      border-bottom: 1.5px solid #1a3d2e;
+      border-left: 1.5px solid var(--wine);
+      border-bottom: 1.5px solid var(--wine);
       transform: rotate(-45deg) translateY(-1px);
     }
 
@@ -178,16 +325,9 @@
       transition: color 0.18s;
     }
 
-    .check-item.selected .check-label {
-      color: rgba(253,246,238,0.95);
-    }
+    .check-item.selected .check-label { color: rgba(253,246,238,0.95); }
+    .check-emoji { font-size: 13px; line-height: 1; }
 
-    .check-emoji {
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    /* ── DIVIDER ── */
     .selector-divider {
       width: 100%;
       height: 1px;
@@ -195,7 +335,6 @@
       margin-bottom: 24px;
     }
 
-    /* ── GENERATE BUTTON ── */
     #generate-btn {
       width: 100%;
       padding: 15px;
@@ -224,11 +363,7 @@
     }
 
     #generate-btn:hover:not(:disabled)::before { opacity: 1; }
-
-    #generate-btn:disabled {
-      opacity: 0.28;
-      cursor: default;
-    }
+    #generate-btn:disabled { opacity: 0.28; cursor: default; }
 
     .hint {
       text-align: center;
@@ -285,11 +420,8 @@
       color: var(--ink-faint);
     }
 
-    .notepad-body {
-      padding: 36px 36px 44px;
-    }
+    .notepad-body { padding: 36px 36px 44px; }
 
-    /* ── NOTE SECTIONS ── */
     .note-section {
       padding-bottom: 32px;
       margin-bottom: 32px;
@@ -313,7 +445,6 @@
       margin-bottom: 14px;
     }
 
-    /* Word */
     .word-display {
       display: flex;
       align-items: flex-end;
@@ -354,7 +485,6 @@
       margin-top: 4px;
     }
 
-    /* Spanish lesson text — NO italics */
     .note-spanish {
       font-family: 'EB Garamond', serif;
       font-style: normal;
@@ -364,7 +494,6 @@
       margin-bottom: 14px;
     }
 
-    /* Reveal */
     .note-reveal-btn {
       font-family: 'DM Sans', sans-serif;
       font-size: 9px;
@@ -406,7 +535,6 @@
       line-height: 1.6;
     }
 
-    /* Tip */
     .note-tip {
       background: rgba(201,84,106,0.04);
       border-left: 2px solid rgba(201,84,106,0.2);
@@ -432,7 +560,6 @@
       line-height: 1.65;
     }
 
-    /* Footer */
     .notepad-footer {
       padding: 16px 36px;
       border-top: 1px solid var(--rule);
@@ -465,176 +592,282 @@
       .notepad-header { padding: 18px 24px 14px; }
       .notepad-footer { padding: 14px 24px; }
       .selector-panel { padding: 24px 20px 22px; }
+      .wheel-window { min-width: 68px; }
+      .wheel-text { font-size: 14px; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="eyebrow">Tu lección de hoy</div>
-  <h1>cada día</h1>
-  <p class="subhead">una palabra &middot; una frase &middot; una oración &middot; un párrafo</p>
-  <div class="header-rule"></div>
-</header>
+<!-- ══ LANDING ══ -->
+<section class="landing">
 
-<div class="container">
+  <h1 class="landing-title">cada día</h1>
+  <p class="landing-tagline">una palabra &middot; una frase &middot; una oración &middot; un párrafo</p>
 
-  <div class="selector-panel">
-    <div class="selector-cols">
+  <div class="wheel-clock">
 
-      <!-- CATEGORIES -->
-      <div>
-        <span class="selector-group-label">Categoría</span>
-        <div class="check-list" id="cat-list">
-          <div class="check-item" data-value="Food" data-prompt="Food" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">🍽️</span> comida</span>
-          </div>
-          <div class="check-item" data-value="Vacation" data-prompt="Vacation" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">✈️</span> vacaciones</span>
-          </div>
-          <div class="check-item" data-value="Work" data-prompt="Work" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">💼</span> trabajo</span>
-          </div>
-          <div class="check-item" data-value="Shopping" data-prompt="Shopping" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">🛍️</span> compras</span>
-          </div>
-          <div class="check-item" data-value="Family" data-prompt="Family & Relationships" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">👨‍👩‍👧</span> familia</span>
-          </div>
-          <div class="check-item" data-value="Health" data-prompt="Health & Body" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">🏥</span> salud</span>
-          </div>
-          <div class="check-item" data-value="Weather" data-prompt="Weather & Nature" onclick="selectCat(this)">
-            <div class="check-box"></div>
-            <span class="check-label"><span class="check-emoji">🌤️</span> clima</span>
-          </div>
-        </div>
+    <div class="wheel-unit">
+      <div class="wheel-label">día</div>
+      <div class="wheel-window">
+        <span class="wheel-text" id="w-day"></span>
       </div>
-
-      <!-- LEVELS -->
-      <div>
-        <span class="selector-group-label">Nivel</span>
-        <div class="check-list" id="level-list">
-          <div class="check-item" data-value="A1" onclick="selectLevel(this)">
-            <div class="check-box"></div>
-            <span class="check-label">A1 &mdash; principiante</span>
-          </div>
-          <div class="check-item" data-value="A2" onclick="selectLevel(this)">
-            <div class="check-box"></div>
-            <span class="check-label">A2 &mdash; elemental</span>
-          </div>
-          <div class="check-item" data-value="B1" onclick="selectLevel(this)">
-            <div class="check-box"></div>
-            <span class="check-label">B1 &mdash; intermedio</span>
-          </div>
-          <div class="check-item" data-value="B2" onclick="selectLevel(this)">
-            <div class="check-box"></div>
-            <span class="check-label">B2 &mdash; avanzado</span>
-          </div>
-          <div class="check-item" data-value="C1" onclick="selectLevel(this)">
-            <div class="check-box"></div>
-            <span class="check-label">C1 &mdash; experto</span>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <div class="selector-divider"></div>
-    <button id="generate-btn" disabled onclick="generate()">GENERAR LECCIÓN</button>
-    <p class="hint" id="hint">elige una categoría y un nivel para continuar</p>
-    <p class="error hidden" id="error-msg">algo salió mal. intenta de nuevo.</p>
-  </div>
+    <div class="wheel-sep">&middot;</div>
 
-  <!-- NOTEPAD -->
-  <div class="notepad hidden" id="notepad">
-
-    <div class="notepad-header">
-      <span class="notepad-date" id="notepad-date"></span>
-      <span class="notepad-badge" id="notepad-badge"></span>
+    <div class="wheel-unit">
+      <div class="wheel-label">categoría</div>
+      <div class="wheel-window">
+        <span class="wheel-text" id="w-cat"></span>
+      </div>
     </div>
 
-    <div class="notepad-body">
+    <div class="wheel-sep">&middot;</div>
 
-      <div class="note-section">
-        <span class="note-label">palabra del día</span>
-        <div class="word-display">
-          <div class="word-spanish" id="word-spanish"></div>
-          <div class="word-english-tag" id="word-english"></div>
-        </div>
-        <div class="word-meta" id="word-meta"></div>
+    <div class="wheel-unit">
+      <div class="wheel-label">nivel</div>
+      <div class="wheel-window">
+        <span class="wheel-text" id="w-level"></span>
       </div>
-
-      <div class="note-section">
-        <span class="note-label">frase del día</span>
-        <div class="note-spanish" id="phrase-spanish"></div>
-        <button class="note-reveal-btn" onclick="toggleReveal('phrase')">mostrar traducción ↓</button>
-        <div class="note-english" id="phrase-translation">
-          <div class="note-english-text" id="phrase-english"></div>
-          <div class="note-context" id="phrase-context"></div>
-        </div>
-      </div>
-
-      <div class="note-section">
-        <span class="note-label">oración de ejemplo</span>
-        <div class="note-spanish" id="sentence-spanish"></div>
-        <button class="note-reveal-btn" onclick="toggleReveal('sentence')">mostrar traducción ↓</button>
-        <div class="note-english" id="sentence-translation">
-          <div class="note-english-text" id="sentence-english"></div>
-        </div>
-      </div>
-
-      <div class="note-section">
-        <span class="note-label">párrafo completo</span>
-        <div class="note-spanish" id="paragraph-spanish"></div>
-        <button class="note-reveal-btn" onclick="toggleReveal('paragraph')">mostrar traducción ↓</button>
-        <div class="note-english" id="paragraph-translation">
-          <div class="note-english-text" id="paragraph-english"></div>
-        </div>
-      </div>
-
-      <div class="note-tip">
-        <span class="note-tip-label">consejo</span>
-        <span class="note-tip-text" id="tip-text"></span>
-      </div>
-
-    </div>
-
-    <div class="notepad-footer">
-      <span class="footer-brand">cada día</span>
-      <span class="footer-info" id="footer-info"></span>
     </div>
 
   </div>
 
+  <button class="scroll-arrow"
+    onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})"
+    aria-label="Ir a la lección">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 7L10 13L16 7"
+        stroke="rgba(253,246,238,0.65)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+</section>
+
+<!-- ══ APP ══ -->
+<div id="app">
+  <div class="app-header">
+    <div class="eyebrow">tu lección de hoy</div>
+    <div class="app-title">cada día</div>
+    <p class="subhead">una palabra &middot; una frase &middot; una oración &middot; un párrafo</p>
+    <div class="header-rule"></div>
+  </div>
+
+  <div class="container">
+
+    <div class="selector-panel">
+      <div class="selector-cols">
+
+        <div>
+          <span class="selector-group-label">Categoría</span>
+          <div class="check-list" id="cat-list">
+            <div class="check-item" data-value="Food" data-prompt="Food" data-label="comida" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">🍽️</span> comida</span>
+            </div>
+            <div class="check-item" data-value="Vacation" data-prompt="Vacation" data-label="vacaciones" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">✈️</span> vacaciones</span>
+            </div>
+            <div class="check-item" data-value="Work" data-prompt="Work" data-label="trabajo" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">💼</span> trabajo</span>
+            </div>
+            <div class="check-item" data-value="Shopping" data-prompt="Shopping" data-label="compras" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">🛍️</span> compras</span>
+            </div>
+            <div class="check-item" data-value="Family" data-prompt="Family & Relationships" data-label="familia" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">👨‍👩‍👧</span> familia</span>
+            </div>
+            <div class="check-item" data-value="Health" data-prompt="Health & Body" data-label="salud" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">🏥</span> salud</span>
+            </div>
+            <div class="check-item" data-value="Weather" data-prompt="Weather & Nature" data-label="clima" onclick="selectCat(this)">
+              <div class="check-box"></div>
+              <span class="check-label"><span class="check-emoji">🌤️</span> clima</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span class="selector-group-label">Nivel</span>
+          <div class="check-list" id="level-list">
+            <div class="check-item" data-value="A1" onclick="selectLevel(this)">
+              <div class="check-box"></div>
+              <span class="check-label">A1 &mdash; principiante</span>
+            </div>
+            <div class="check-item" data-value="A2" onclick="selectLevel(this)">
+              <div class="check-box"></div>
+              <span class="check-label">A2 &mdash; elemental</span>
+            </div>
+            <div class="check-item" data-value="B1" onclick="selectLevel(this)">
+              <div class="check-box"></div>
+              <span class="check-label">B1 &mdash; intermedio</span>
+            </div>
+            <div class="check-item" data-value="B2" onclick="selectLevel(this)">
+              <div class="check-box"></div>
+              <span class="check-label">B2 &mdash; avanzado</span>
+            </div>
+            <div class="check-item" data-value="C1" onclick="selectLevel(this)">
+              <div class="check-box"></div>
+              <span class="check-label">C1 &mdash; experto</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="selector-divider"></div>
+      <button id="generate-btn" disabled onclick="generate()">GENERAR LECCIÓN</button>
+      <p class="hint" id="hint">elige una categoría y un nivel para continuar</p>
+      <p class="error hidden" id="error-msg">algo salió mal. intenta de nuevo.</p>
+    </div>
+
+    <div class="notepad hidden" id="notepad">
+      <div class="notepad-header">
+        <span class="notepad-date" id="notepad-date"></span>
+        <span class="notepad-badge" id="notepad-badge"></span>
+      </div>
+      <div class="notepad-body">
+
+        <div class="note-section">
+          <span class="note-label">palabra del día</span>
+          <div class="word-display">
+            <div class="word-spanish" id="word-spanish"></div>
+            <div class="word-english-tag" id="word-english"></div>
+          </div>
+          <div class="word-meta" id="word-meta"></div>
+        </div>
+
+        <div class="note-section">
+          <span class="note-label">frase del día</span>
+          <div class="note-spanish" id="phrase-spanish"></div>
+          <button class="note-reveal-btn" onclick="toggleReveal('phrase')">mostrar traducción ↓</button>
+          <div class="note-english" id="phrase-translation">
+            <div class="note-english-text" id="phrase-english"></div>
+            <div class="note-context" id="phrase-context"></div>
+          </div>
+        </div>
+
+        <div class="note-section">
+          <span class="note-label">oración de ejemplo</span>
+          <div class="note-spanish" id="sentence-spanish"></div>
+          <button class="note-reveal-btn" onclick="toggleReveal('sentence')">mostrar traducción ↓</button>
+          <div class="note-english" id="sentence-translation">
+            <div class="note-english-text" id="sentence-english"></div>
+          </div>
+        </div>
+
+        <div class="note-section">
+          <span class="note-label">párrafo completo</span>
+          <div class="note-spanish" id="paragraph-spanish"></div>
+          <button class="note-reveal-btn" onclick="toggleReveal('paragraph')">mostrar traducción ↓</button>
+          <div class="note-english" id="paragraph-translation">
+            <div class="note-english-text" id="paragraph-english"></div>
+          </div>
+        </div>
+
+        <div class="note-tip">
+          <span class="note-tip-label">consejo</span>
+          <span class="note-tip-text" id="tip-text"></span>
+        </div>
+
+      </div>
+      <div class="notepad-footer">
+        <span class="footer-brand">cada día</span>
+        <span class="footer-info" id="footer-info"></span>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
+  /* ── DATA ── */
   const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio',
                   'agosto','septiembre','octubre','noviembre','diciembre'];
+  const DAYS   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const CATS   = ['comida','vacaciones','trabajo','compras','familia','salud','clima'];
+  const LEVELS = ['A1','A2','B1','B2','C1'];
 
-  let selectedCat = null;
-  let selectedPrompt = null;
-  let selectedLevel = null;
+  let selectedCat      = null;
+  let selectedPrompt   = null;
+  let selectedLevel    = null;
   let selectedCatLabel = null;
 
-  function getDate() {
+  /* ── DATE HELPERS ── */
+  function getTodayString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  }
+
+  function getDisplayDate() {
     const d = new Date();
     return `${d.getDate()} de ${MONTHS[d.getMonth()]}, ${d.getFullYear()}`;
   }
 
+  /* ══════════════════════════════
+     WHEEL / SLOT MACHINE
+  ══════════════════════════════ */
+  let catIdx   = 0;
+  let levelIdx = 0;
+
+  function wheelSpin(id, newText) {
+    const el = document.getElementById(id);
+
+    // exit current
+    el.classList.remove('enter');
+    el.classList.add('exit');
+
+    setTimeout(() => {
+      el.textContent = newText;
+      el.classList.remove('exit');
+      el.classList.add('enter');
+    }, 160); // halfway through exit, swap text and enter
+  }
+
+  // Init with real current day, first cat, first level
+  const dayEl   = document.getElementById('w-day');
+  const catEl   = document.getElementById('w-cat');
+  const levelEl = document.getElementById('w-level');
+
+  dayEl.textContent   = DAYS[new Date().getDay()];
+  catEl.textContent   = CATS[0];
+  levelEl.textContent = LEVELS[0];
+
+  // Day — slow, every 4s (just refreshes to current day)
+  setInterval(() => {
+    wheelSpin('w-day', DAYS[new Date().getDay()]);
+  }, 4000);
+
+  // Category — medium, every 1.6s
+  setInterval(() => {
+    catIdx = (catIdx + 1) % CATS.length;
+    wheelSpin('w-cat', CATS[catIdx]);
+  }, 1600);
+
+  // Level — fast, every 900ms
+  setInterval(() => {
+    levelIdx = (levelIdx + 1) % LEVELS.length;
+    wheelSpin('w-level', LEVELS[levelIdx]);
+  }, 900);
+
+  /* ══════════════════════════════
+     APP LOGIC
+  ══════════════════════════════ */
   function selectCat(el) {
     document.querySelectorAll('#cat-list .check-item').forEach(i => i.classList.remove('selected'));
     el.classList.add('selected');
-    selectedCat = el.dataset.value;
-    selectedPrompt = el.dataset.prompt;
-    selectedCatLabel = el.querySelector('.check-label').textContent.trim();
+    selectedCat      = el.dataset.value;
+    selectedPrompt   = el.dataset.prompt;
+    selectedCatLabel = el.dataset.label;
     checkReady();
   }
 
@@ -646,7 +879,7 @@
   }
 
   function checkReady() {
-    const btn = document.getElementById('generate-btn');
+    const btn  = document.getElementById('generate-btn');
     const hint = document.getElementById('hint');
     if (selectedCat && selectedLevel) {
       btn.disabled = false;
@@ -655,7 +888,7 @@
   }
 
   function toggleReveal(key) {
-    const el = document.getElementById(key + '-translation');
+    const el  = document.getElementById(key + '-translation');
     const btn = el.previousElementSibling;
     const isVisible = el.classList.contains('visible');
     el.classList.toggle('visible');
@@ -663,12 +896,12 @@
   }
 
   async function generate() {
-    const btn = document.getElementById('generate-btn');
-    const notepad = document.getElementById('notepad');
+    const btn      = document.getElementById('generate-btn');
+    const notepad  = document.getElementById('notepad');
     const errorMsg = document.getElementById('error-msg');
 
     btn.textContent = 'generando...';
-    btn.disabled = true;
+    btn.disabled    = true;
     notepad.classList.add('hidden');
     errorMsg.classList.add('hidden');
 
@@ -678,7 +911,11 @@
       t.previousElementSibling.textContent = 'mostrar traducción ↓';
     });
 
-    const prompt = `You are a Spanish language teacher. Generate a daily Spanish lesson for a ${selectedLevel} (CEFR) learner focused on the topic: "${selectedPrompt}".
+    const today = getTodayString();
+
+    const prompt = `You are a Spanish language teacher. Generate the daily Spanish lesson for the date ${today}, category "${selectedPrompt}", CEFR level ${selectedLevel}.
+
+This combination must always produce the same word for this date. Choose a single specific word that is uniquely determined by this date, category, and level — do not randomize.
 
 Return ONLY a valid JSON object with this exact structure:
 {
@@ -711,31 +948,32 @@ Make the content genuinely useful, natural-sounding, and appropriately complex f
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
+          model:       'claude-sonnet-4-20250514',
+          max_tokens:  1000,
+          temperature: 0,
           messages: [{ role: 'user', content: prompt }]
         })
       });
 
-      const data = await res.json();
-      const text = data.content?.find(b => b.type === 'text')?.text || '';
+      const data  = await res.json();
+      const text  = data.content?.find(b => b.type === 'text')?.text || '';
       const clean = text.replace(/```json|```/g, '').trim();
-      const d = JSON.parse(clean);
+      const d     = JSON.parse(clean);
 
-      document.getElementById('notepad-date').textContent = getDate();
-      document.getElementById('notepad-badge').textContent = selectedCatLabel + ' · ' + selectedLevel;
-      document.getElementById('word-spanish').textContent = d.word.spanish;
-      document.getElementById('word-english').textContent = d.word.english;
-      document.getElementById('word-meta').textContent = d.word.pronunciation + ' · ' + d.word.partOfSpeech;
-      document.getElementById('phrase-spanish').textContent = d.phrase.spanish;
-      document.getElementById('phrase-english').textContent = d.phrase.english;
-      document.getElementById('phrase-context').textContent = d.phrase.context;
+      document.getElementById('notepad-date').textContent     = getDisplayDate();
+      document.getElementById('notepad-badge').textContent    = selectedCatLabel + ' · ' + selectedLevel;
+      document.getElementById('word-spanish').textContent     = d.word.spanish;
+      document.getElementById('word-english').textContent     = d.word.english;
+      document.getElementById('word-meta').textContent        = d.word.pronunciation + ' · ' + d.word.partOfSpeech;
+      document.getElementById('phrase-spanish').textContent   = d.phrase.spanish;
+      document.getElementById('phrase-english').textContent   = d.phrase.english;
+      document.getElementById('phrase-context').textContent   = d.phrase.context;
       document.getElementById('sentence-spanish').textContent = d.sentence.spanish;
       document.getElementById('sentence-english').textContent = d.sentence.english;
       document.getElementById('paragraph-spanish').textContent = d.paragraph.spanish;
       document.getElementById('paragraph-english').textContent = d.paragraph.english;
-      document.getElementById('tip-text').textContent = d.tip;
-      document.getElementById('footer-info').textContent = 'cefr ' + selectedLevel.toLowerCase();
+      document.getElementById('tip-text').textContent         = d.tip;
+      document.getElementById('footer-info').textContent      = 'cefr ' + selectedLevel.toLowerCase();
 
       notepad.classList.remove('hidden');
       notepad.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -743,7 +981,7 @@ Make the content genuinely useful, natural-sounding, and appropriately complex f
       errorMsg.classList.remove('hidden');
     } finally {
       btn.textContent = 'GENERAR LECCIÓN';
-      btn.disabled = false;
+      btn.disabled    = false;
     }
   }
 </script>
