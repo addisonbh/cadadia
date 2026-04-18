@@ -57,23 +57,11 @@
       overflow: hidden;
     }
 
-    /* vignette */
-    .landing::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.38) 100%);
-    }
-
-    /* ── HANDWRITING TITLE ── */
+    /* ── TITLE ── */
     .landing-title {
       margin-bottom: 28px;
       position: relative;
       z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .title-text {
@@ -84,20 +72,7 @@
       letter-spacing: -0.02em;
       color: #fff;
       line-height: 0.9;
-      position: relative;
-      /* backlit glow */
-      text-shadow:
-        0 0 40px rgba(200,169,110,0.4),
-        0 0 80px rgba(200,169,110,0.15),
-        0 0 120px rgba(201,84,106,0.1);
-      /* clip-based left→right reveal */
-      clip-path: inset(0 100% 0 0);
-      animation: revealTitle 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
-    }
-
-    @keyframes revealTitle {
-      0%   { clip-path: inset(0 100% 0 0); }
-      100% { clip-path: inset(0 0% 0 0); }
+      text-shadow: 0 4px 80px rgba(0,0,0,0.2);
     }
 
     .landing-tagline {
@@ -109,8 +84,6 @@
       margin-bottom: 64px;
       position: relative;
       z-index: 1;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 1.4s forwards;
     }
 
     @keyframes fadeUp {
@@ -127,8 +100,6 @@
       margin-bottom: 80px;
       position: relative;
       z-index: 1;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 1.7s forwards;
     }
 
     .wheel-unit {
@@ -208,52 +179,29 @@
       padding-top: 24px;
     }
 
-    /* ── SCROLL LINE ── */
-    .scroll-line {
+    /* ── SCROLL ARROW ── */
+    .scroll-arrow {
       position: absolute;
       bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      z-index: 1;
       background: none;
       border: none;
+      cursor: pointer;
       padding: 8px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 2s forwards;
+      z-index: 1;
+      animation: arrowFloat 2.6s ease-in-out infinite;
     }
 
-    .scroll-line-track {
-      width: 1px;
-      height: 0;
-      background: rgba(200,169,110,0.4);
-      animation: lineGrow 2s ease-in-out 2.2s infinite;
-      transform-origin: top center;
+    .scroll-arrow svg {
+      width: 26px;
+      height: 26px;
+      display: block;
     }
 
-    .scroll-line-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: rgba(200,169,110,0.5);
-      margin-top: 3px;
-      animation: dotFade 2s ease-in-out 2.2s infinite;
-    }
-
-    @keyframes lineGrow {
-      0%   { height: 0px;  opacity: 0; }
-      30%  { opacity: 1; }
-      70%  { height: 36px; opacity: 1; }
-      100% { height: 36px; opacity: 0; }
-    }
-
-    @keyframes dotFade {
-      0%, 30% { opacity: 0; }
-      60%      { opacity: 0.6; }
-      100%     { opacity: 0; }
+    @keyframes arrowFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.35; }
+      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.6; }
     }
 
     /* ══════════════════════════════
@@ -719,11 +667,16 @@
     </div>
   </div>
 
-  <button class="scroll-line"
+  <button class="scroll-arrow"
     onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})"
     aria-label="Ir a la lección">
-    <div class="scroll-line-track"></div>
-    <div class="scroll-line-dot"></div>
+    <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 9L13 17L21 9"
+        stroke="rgba(253,246,238,0.65)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+    </svg>
   </button>
 
 </section>
