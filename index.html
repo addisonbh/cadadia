@@ -76,71 +76,28 @@
       justify-content: center;
     }
 
-    /*
-      SVG approach: we use Playfair Display italic rendered as text
-      with a clip/stroke animation to simulate the handwriting reveal.
-      The text draws left-to-right via a moving clip rect,
-      while a glow filter builds underneath.
-    */
-    .title-svg {
-      overflow: visible;
-      width: min(640px, 88vw);
-      height: auto;
-    }
-
-    /* glow filter applied to text group */
-    .title-glow-text {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-style: italic;
-      font-size: 96px;
+    .title-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4.5rem, 15vw, 8rem);
       font-weight: 400;
-      fill: #fff;
-      /* start invisible */
-      opacity: 0;
-    }
-
-    .title-glow-text.reveal {
-      animation: titleFadeIn 0.4s ease 1.1s forwards;
-    }
-
-    /* the "writing" mask rect animates width 0 → 100% */
-    .title-mask-rect {
-      x: 0; y: 0;
-      width: 0%; height: 100%;
-    }
-
-    .title-mask-rect.draw {
-      animation: maskDraw 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes maskDraw {
-      0%   { width: 0%; }
-      100% { width: 100%; }
-    }
-
-    @keyframes titleFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    /* subtle leading glow — a blurred copy slightly ahead */
-    .title-glow-blur {
-      font-family: 'Playfair Display', Georgia, serif;
       font-style: italic;
-      font-size: 96px;
-      font-weight: 400;
-      fill: rgba(200,169,110,0.35);
-      filter: blur(18px);
-      opacity: 0;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 0.9;
+      position: relative;
+      /* backlit glow */
+      text-shadow:
+        0 0 40px rgba(200,169,110,0.4),
+        0 0 80px rgba(200,169,110,0.15),
+        0 0 120px rgba(201,84,106,0.1);
+      /* clip-based left→right reveal */
+      clip-path: inset(0 100% 0 0);
+      animation: revealTitle 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
     }
 
-    .title-glow-blur.reveal {
-      animation: glowReveal 0.6s ease 0.8s forwards;
-    }
-
-    @keyframes glowReveal {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+    @keyframes revealTitle {
+      0%   { clip-path: inset(0 100% 0 0); }
+      100% { clip-path: inset(0 0% 0 0); }
     }
 
     .landing-tagline {
@@ -734,61 +691,9 @@
 <!-- ══ LANDING ══ -->
 <section class="landing">
 
-  <!-- SVG handwriting title -->
   <div class="landing-title">
-    <!--
-      Strategy: render "cada día" as SVG text with a clipPath mask
-      that animates from width 0% → 100%, simulating left-to-right reveal.
-      A blurred glow copy fades in behind it for the backlit effect.
-      Both use the loaded web font via SVG text element.
-    -->
-    <svg class="title-svg" viewBox="0 0 640 110" xmlns="http://www.w3.org/2000/svg" aria-label="cada día">
-      <defs>
-        <!-- glow filter -->
-        <filter id="glow" x="-20%" y="-50%" width="140%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
-          <feMerge>
-            <feMergeNode in="blur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-
-        <!-- clip mask for left→right reveal -->
-        <clipPath id="titleClip">
-          <rect id="clipRect" x="0" y="0" width="0" height="110"/>
-        </clipPath>
-      </defs>
-
-      <!-- backlit glow layer — blurred, gold-tinted, fades in -->
-      <text
-        x="320" y="88"
-        text-anchor="middle"
-        font-family="'Playfair Display', Georgia, serif"
-        font-style="italic"
-        font-size="96"
-        font-weight="400"
-        fill="rgba(200,169,110,0.3)"
-        filter="url(#glow)"
-        class="title-glow-blur"
-        id="titleGlow"
-      >cada día</text>
-
-      <!-- main white text, revealed by animated clip -->
-      <g clip-path="url(#titleClip)">
-        <text
-          x="320" y="88"
-          text-anchor="middle"
-          font-family="'Playfair Display', Georgia, serif"
-          font-style="italic"
-          font-size="96"
-          font-weight="400"
-          fill="#ffffff"
-          id="titleText"
-        >cada día</text>
-      </g>
-    </svg>
+    <span class="title-text">cada día</span>
   </div>
-
   <p class="landing-tagline">una palabra &middot; una frase &middot; una oración &middot; un párrafo</p>
 
   <div class="wheel-clock">
@@ -977,46 +882,6 @@
   function getDisplayDate() {
     const d = new Date();
     return `${d.getDate()} de ${MONTHS[d.getMonth()]}, ${d.getFullYear()}`;
-  }
-
-  /* ── HANDWRITING REVEAL ──
-     Wait for font to load, then animate the SVG clipRect width 0→640
-     and fade in the glow layer.
-  */
-  function startTitleAnimation() {
-    const clipRect = document.getElementById('clipRect');
-    const glow     = document.getElementById('titleGlow');
-
-    if (!clipRect) return;
-
-    // Animate clip rect width using WAAPI
-    clipRect.animate(
-      [{ width: '0' }, { width: '640' }],
-      {
-        duration: 1200,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        fill: 'forwards',
-        delay: 200
-      }
-    );
-
-    // Fade in glow slightly before reveal completes
-    glow.animate(
-      [{ opacity: 0 }, { opacity: 1 }],
-      {
-        duration: 700,
-        easing: 'ease',
-        fill: 'forwards',
-        delay: 800
-      }
-    );
-  }
-
-  // Start after fonts load (or after small timeout fallback)
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(startTitleAnimation);
-  } else {
-    setTimeout(startTitleAnimation, 400);
   }
 
   /* ── WHEEL ── */
