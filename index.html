@@ -29,6 +29,19 @@
       padding-bottom: 80px;
     }
 
+    /* ── GRAIN TEXTURE overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+      background-repeat: repeat;
+    }
+
     /* ══════════════════════════════
        LANDING
     ══════════════════════════════ */
@@ -41,6 +54,20 @@
       text-align: center;
       padding: 48px 24px 80px;
       position: relative;
+      overflow: hidden;
+    }
+
+    /* Vignette */
+    .landing::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(0,0,0,0.35) 100%
+      );
     }
 
     .landing-title {
@@ -53,6 +80,8 @@
       line-height: 0.9;
       text-shadow: 0 4px 80px rgba(0,0,0,0.2);
       margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
     }
 
     .landing-tagline {
@@ -62,15 +91,19 @@
       color: rgba(200,169,110,0.5);
       letter-spacing: 0.06em;
       margin-bottom: 64px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ── WHEEL / SLOT MACHINE ── */
+    /* ── WHEEL ── */
     .wheel-clock {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      margin-bottom: 72px;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
     }
 
     .wheel-unit {
@@ -100,13 +133,12 @@
       justify-content: center;
     }
 
-    /* subtle top/bottom fade to sell the wheel illusion */
     .wheel-window::before,
     .wheel-window::after {
       content: '';
       position: absolute;
       left: 0; right: 0;
-      height: 12px;
+      height: 14px;
       z-index: 2;
       pointer-events: none;
     }
@@ -128,23 +160,20 @@
       position: absolute;
     }
 
-    /* slide out up */
     .wheel-text.exit {
       animation: wheelExit 0.32s ease-in forwards;
     }
-    /* slide in from below */
     .wheel-text.enter {
       animation: wheelEnter 0.32s ease-out forwards;
     }
 
     @keyframes wheelExit {
-      from { transform: translateY(0);    opacity: 1; }
+      from { transform: translateY(0);     opacity: 1; }
       to   { transform: translateY(-22px); opacity: 0; }
     }
-
     @keyframes wheelEnter {
       from { transform: translateY(22px); opacity: 0; }
-      to   { transform: translateY(0);   opacity: 1; }
+      to   { transform: translateY(0);    opacity: 1; }
     }
 
     .wheel-sep {
@@ -154,28 +183,51 @@
       padding-top: 24px;
     }
 
-    /* ── SCROLL ARROW ── */
-    .scroll-arrow {
+    /* ── SCROLL LINE ARROW ── */
+    .scroll-line {
       position: absolute;
-      bottom: 32px;
+      bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      cursor: pointer;
+      z-index: 1;
       background: none;
       border: none;
-      cursor: pointer;
       padding: 8px;
-      animation: arrowFloat 2.6s ease-in-out infinite;
     }
 
-    .scroll-arrow svg {
-      width: 18px;
-      height: 18px;
-      display: block;
+    .scroll-line-track {
+      width: 1px;
+      height: 0;
+      background: rgba(200,169,110,0.4);
+      animation: lineGrow 2s ease-in-out infinite;
+      transform-origin: top center;
     }
 
-    @keyframes arrowFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.3; }
-      50%       { transform: translateX(-50%) translateY(6px); opacity: 0.55; }
+    .scroll-line-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(200,169,110,0.5);
+      margin-top: 3px;
+      animation: dotFade 2s ease-in-out infinite;
+    }
+
+    @keyframes lineGrow {
+      0%   { height: 0px;  opacity: 0; }
+      30%  { opacity: 1; }
+      70%  { height: 36px; opacity: 1; }
+      100% { height: 36px; opacity: 0; }
+    }
+
+    @keyframes dotFade {
+      0%, 30% { opacity: 0; }
+      60%      { opacity: 0.6; }
+      100%     { opacity: 0; }
     }
 
     /* ══════════════════════════════
@@ -386,12 +438,33 @@
     /* ── NOTEPAD ── */
     .notepad {
       margin-top: 28px;
-      background: var(--cream);
       border-radius: 1px;
       box-shadow:
         0 2px 4px rgba(0,0,0,0.08),
         0 8px 24px rgba(0,0,0,0.14),
         0 40px 80px rgba(0,0,0,0.28);
+      /* paper texture via layered gradients */
+      background-color: #fdf6ee;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, #fdf8f2 0%, #fdf6ee 50%, #f9f0e4 100%);
+      background-size: 160px 160px, 100% 100%;
+    }
+
+    /* Notepad slide-up animation */
+    @keyframes notepadReveal {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .notepad.visible {
+      animation: notepadReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     .notepad-header {
@@ -503,12 +576,16 @@
       color: var(--ink-faint);
       background: none;
       border: none;
+      border-bottom: 1px solid rgba(160,144,126,0.3);
       cursor: pointer;
-      padding: 0;
-      transition: color 0.2s;
+      padding: 0 0 1px 0;
+      transition: color 0.2s, border-color 0.2s;
     }
 
-    .note-reveal-btn:hover { color: var(--ink-soft); }
+    .note-reveal-btn:hover {
+      color: var(--ink-soft);
+      border-color: rgba(90,74,56,0.4);
+    }
 
     .note-english {
       display: none;
@@ -606,44 +683,33 @@
   <p class="landing-tagline">una palabra &middot; una frase &middot; una oración &middot; un párrafo</p>
 
   <div class="wheel-clock">
-
     <div class="wheel-unit">
       <div class="wheel-label">día</div>
       <div class="wheel-window">
         <span class="wheel-text" id="w-day"></span>
       </div>
     </div>
-
     <div class="wheel-sep">&middot;</div>
-
     <div class="wheel-unit">
       <div class="wheel-label">categoría</div>
       <div class="wheel-window">
         <span class="wheel-text" id="w-cat"></span>
       </div>
     </div>
-
     <div class="wheel-sep">&middot;</div>
-
     <div class="wheel-unit">
       <div class="wheel-label">nivel</div>
       <div class="wheel-window">
         <span class="wheel-text" id="w-level"></span>
       </div>
     </div>
-
   </div>
 
-  <button class="scroll-arrow"
+  <button class="scroll-line"
     onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})"
     aria-label="Ir a la lección">
-    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4 7L10 13L16 7"
-        stroke="rgba(253,246,238,0.65)"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"/>
-    </svg>
+    <div class="scroll-line-track"></div>
+    <div class="scroll-line-dot"></div>
   </button>
 
 </section>
@@ -790,7 +856,6 @@
 </div>
 
 <script>
-  /* ── DATA ── */
   const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio',
                   'agosto','septiembre','octubre','noviembre','diciembre'];
   const DAYS   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
@@ -802,68 +867,51 @@
   let selectedLevel    = null;
   let selectedCatLabel = null;
 
-  /* ── DATE HELPERS ── */
-  function getTodayString() {
-    const d = new Date();
-    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-  }
-
   function getDisplayDate() {
     const d = new Date();
     return `${d.getDate()} de ${MONTHS[d.getMonth()]}, ${d.getFullYear()}`;
   }
 
-  /* ══════════════════════════════
-     WHEEL / SLOT MACHINE
-  ══════════════════════════════ */
+  /* ── WHEEL ── */
+  let dayIdx   = new Date().getDay();
   let catIdx   = 0;
   let levelIdx = 0;
 
   function wheelSpin(id, newText) {
     const el = document.getElementById(id);
-
-    // exit current
     el.classList.remove('enter');
     el.classList.add('exit');
-
     setTimeout(() => {
       el.textContent = newText;
       el.classList.remove('exit');
       el.classList.add('enter');
-    }, 160); // halfway through exit, swap text and enter
+    }, 160);
   }
 
-  // Init with real current day, first cat, first level
-  const dayEl   = document.getElementById('w-day');
-  const catEl   = document.getElementById('w-cat');
-  const levelEl = document.getElementById('w-level');
+  // Init
+  document.getElementById('w-day').textContent   = DAYS[dayIdx];
+  document.getElementById('w-cat').textContent   = CATS[catIdx];
+  document.getElementById('w-level').textContent = LEVELS[levelIdx];
 
-  dayEl.textContent   = DAYS[new Date().getDay()];
-  catEl.textContent   = CATS[0];
-  levelEl.textContent = LEVELS[0];
-
-  // Day — slow, every 3.5s, cycles through all 7 days
-  let dayIdx = new Date().getDay();
+  // Day — 2.5s, cycles through all 7
   setInterval(() => {
     dayIdx = (dayIdx + 1) % DAYS.length;
     wheelSpin('w-day', DAYS[dayIdx]);
-  }, 3500);
+  }, 2500);
 
-  // Category — medium, every 1.6s
+  // Category — 1.6s
   setInterval(() => {
     catIdx = (catIdx + 1) % CATS.length;
     wheelSpin('w-cat', CATS[catIdx]);
   }, 1600);
 
-  // Level — fast, every 900ms
+  // Level — 900ms
   setInterval(() => {
     levelIdx = (levelIdx + 1) % LEVELS.length;
     wheelSpin('w-level', LEVELS[levelIdx]);
   }, 900);
 
-  /* ══════════════════════════════
-     APP LOGIC
-  ══════════════════════════════ */
+  /* ── APP ── */
   function selectCat(el) {
     document.querySelectorAll('#cat-list .check-item').forEach(i => i.classList.remove('selected'));
     el.classList.add('selected');
@@ -904,6 +952,7 @@
 
     btn.textContent = 'generando...';
     btn.disabled    = true;
+    notepad.classList.remove('visible');
     notepad.classList.add('hidden');
     errorMsg.classList.add('hidden');
 
@@ -913,11 +962,9 @@
       t.previousElementSibling.textContent = 'mostrar traducción ↓';
     });
 
-    const today = getTodayString();
+    const prompt = `You are a Spanish language teacher. Generate a Spanish lesson for a ${selectedLevel} (CEFR) learner focused on the topic: "${selectedPrompt}".
 
-    const prompt = `You are a Spanish language teacher. Generate the daily Spanish lesson for the date ${today}, category "${selectedPrompt}", CEFR level ${selectedLevel}.
-
-This combination must always produce the same word for this date. Choose a single specific word that is uniquely determined by this date, category, and level — do not randomize.
+Choose a word that is genuinely useful, varied, and appropriate for the level. Do not repeat common words — aim for something the learner may not already know.
 
 Return ONLY a valid JSON object with this exact structure:
 {
@@ -952,7 +999,7 @@ Make the content genuinely useful, natural-sounding, and appropriately complex f
         body: JSON.stringify({
           model:       'claude-sonnet-4-20250514',
           max_tokens:  1000,
-          temperature: 0,
+          temperature: 1,
           messages: [{ role: 'user', content: prompt }]
         })
       });
@@ -978,7 +1025,17 @@ Make the content genuinely useful, natural-sounding, and appropriately complex f
       document.getElementById('footer-info').textContent      = 'cefr ' + selectedLevel.toLowerCase();
 
       notepad.classList.remove('hidden');
-      notepad.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // small delay so display:none is cleared before animation fires
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          notepad.classList.add('visible');
+        });
+      });
+
+      setTimeout(() => {
+        notepad.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+
     } catch (e) {
       errorMsg.classList.remove('hidden');
     } finally {
