@@ -905,9 +905,23 @@
       t.previousElementSibling.textContent = 'mostrar traducción ↓';
     });
 
+    const seed = Math.floor(Math.random() * 1000000);
+
+    const levelScope = {
+      'A1': 'Basic survival vocabulary only — single common nouns and verbs a complete beginner needs immediately. Nothing abstract or complex.',
+      'A2': 'Everyday vocabulary slightly beyond survival. Simple action verbs, common adjectives, routine situations. Avoid anything a complete beginner already knows.',
+      'B1': 'Intermediate vocabulary. Avoid anything a beginner would know. Include verbs with irregular conjugations, idiomatic nouns, useful connectors, and words that appear in natural conversation.',
+      'B2': 'Upper intermediate vocabulary. Abstract concepts, nuanced adjectives, words with multiple meanings or connotations. Less common but completely natural — something an intermediate learner would be excited to discover.',
+      'C1': 'Advanced vocabulary. Sophisticated, low-frequency words. Academic or literary register, nuanced expressions, words that educated native speakers use but learners rarely study.'
+    };
+
     const prompt = `You are a Spanish language teacher. Generate a Spanish lesson for a ${selectedLevel} (CEFR) learner focused on the topic: "${selectedPrompt}".
 
-Choose a word that is genuinely useful, varied, and appropriate for the level. Do not repeat common words — aim for something the learner may not already know.
+VOCABULARY LEVEL: ${levelScope[selectedLevel]}
+
+Avoid common textbook vocabulary. Choose something specific, vivid, and genuinely useful that a learner at this level would be excited to discover — not the first word that comes to mind for this category.
+
+Random seed: ${seed}
 
 Return ONLY a valid JSON object with this exact structure:
 {
